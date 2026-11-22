@@ -1,0 +1,21 @@
+# Credentials & Secrets
+.env
+*.pem
+*.key
+config/secrets.json
+
+# Python / PySpark Cache
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+spark-warehouse/
+derby.log
+
+# Power BI Local Cache
+*.pbix.tmp
+.pbi/localSettings.json
+
+# OS Files
+.DS_Store
+Thumbs.db

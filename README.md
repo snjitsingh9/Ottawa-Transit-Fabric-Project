@@ -1,21 +1,29 @@
-**Project Title & Overview**
-# Ottawa Transit Analytics (Microsoft Fabric)
-An end-to-end data engineering solution that ingests bus stop data from the City of Ottawa (ArcGIS REST API) into a Microsoft Fabric Medallion Architecture.
+# Ottawa Transit Analytics — Microsoft Fabric Medallion Architecture
 
-# Architecture Diagram (Text or Image)
-Explain the flow you built:
-  Bronze: Raw JSON/CSV ingestion using Data Factory Pipelines (handling REST API pagination).
-  Silver: Data cleaning and Delta table conversion using Spark Notebooks (PySpark).
-  Gold: Semantic modeling and visualization in Power BI.
+An automated, end-to-end data engineering and business intelligence pipeline that extracts municipal transit infrastructure data from the City of Ottawa ArcGIS REST API, processes it through a multi-layer Medallion architecture in Microsoft Fabric, and delivers governed Power BI self-serve analytics.
 
-# Technical Features
-Highlight the hard parts you solved:
-  Advanced Pagination: Implemented resultRecordOffset logic to bypass the 1,000-row API limit for a 5,800-row dataset.
-  Environment Governance: Full ALM (Application Lifecycle Management) using Dev -> Test -> Prod deployment pipelines.
-  CI/CD: Workspace integration with GitHub for version control of Notebooks and Semantic Models.
+---
 
-# Setup Instructions
-Briefly mention how to deploy:
-  Connect the Fabric Workspace to this Repo.
-  Configure Deployment Rules for Lakehouse re-mapping.
-  Run the Ingestion Pipeline.
+## Business & Engineering Problem
+Municipal spatial APIs (ArcGIS) enforce strict per-request record limits and return deeply nested JSON structures unsuitable for direct BI reporting. Without automated pagination, schema enforcement, and environment isolation, operational reporting relies on manual exports prone to schema drift and stale metrics.
+
+**Solution:** Built a fault-tolerant, metadata-driven ingestion and transformation framework in Microsoft Fabric with full Application Lifecycle Management (ALM) and automated Power BI semantic model refreshes.
+
+---
+
+## System Architecture
+
+```text
+[City of Ottawa ArcGIS REST API]
+               │
+               ▼
+(Data Factory Pipeline + Dynamic Offset Pagination)
+[Bronze Layer: Lakehouse] ──► Immutable Raw JSON / CSV Landing Zone
+               │
+               ▼
+(PySpark Notebooks: Schema Enforcement & Spatial Parsing)
+[Silver Layer: Delta Tables] ──► Cleansed, Deduplicated Infrastructure Entities
+               │
+               ▼
+(Star Schema Semantic Model + Governed DAX)
+[Gold Layer: Power BI] ──► Self-Serve Operational & Coverage Dashboards
